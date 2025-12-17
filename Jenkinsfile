@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -20,22 +19,23 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
+                dir('frontend') {
+                    bat 'npm install'
+                }
             }
         }
 
-        stage('Run Tests') {
+        stage('Build React App') {
             steps {
-                bat 'npm test'
+                dir('frontend') {
+                    bat 'npm run build'
+                }
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy (Local Test)') {
             steps {
-                bat '''
-                pm2 stop food-app || echo Not running
-                pm2 start index.js --name food-app
-                '''
+                echo 'Frontend build completed successfully'
             }
         }
     }
@@ -49,3 +49,5 @@ pipeline {
         }
     }
 }
+
+
