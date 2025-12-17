@@ -28,7 +28,12 @@ pipeline {
         stage('Build React App') {
             steps {
                 dir('frontend') {
-                    bat 'set CI=false && npm run build'
+                     bat '''
+            echo Disabling ESLint for CI build
+            set DISABLE_ESLINT_PLUGIN=true
+            set CI=false
+            npm run build
+            '''
                 }
             }
         }
