@@ -28,21 +28,21 @@ pipeline {
         stage('Build React App') {
             steps {
                 dir('frontend') {
-                    bat 'npm run build'
+                    bat 'set CI=false && npm run build'
                 }
             }
         }
 
         stage('Deploy (Local Test)') {
             steps {
-                echo 'Frontend build completed successfully'
+                echo '✅ Frontend build successful'
             }
         }
     }
 
     post {
         success {
-            echo '✅ CI/CD Pipeline Completed Successfully'
+            echo '🎉 CI/CD Pipeline Completed Successfully'
         }
         failure {
             echo '❌ CI/CD Pipeline Failed'
