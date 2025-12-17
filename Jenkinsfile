@@ -1,14 +1,6 @@
+
 pipeline {
     agent any
-
-    tools {
- nodejs 'NodeJS-18'
-
-    }
-
-    environment {
-        APP_NAME = "food-delivery-nodejs"
-    }
 
     stages {
 
@@ -19,29 +11,29 @@ pipeline {
             }
         }
 
+        stage('Verify Node & NPM') {
+            steps {
+                bat 'node -v'
+                bat 'npm -v'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'npm test'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo "No build step needed for Node.js"
+                bat 'npm test'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Deploying application..."
-                sh '''
-                pm2 stop food-app || true
+                bat '''
+                pm2 stop food-app || echo Not running
                 pm2 start index.js --name food-app
                 '''
             }
@@ -50,11 +42,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ CI/CD Pipeline Completed Successfully"
+            echo '✅ CI/CD Pipeline Completed Successfully'
         }
         failure {
-            echo "❌ Pipeline Failed"
+            echo '❌ CI/CD Pipeline Failed'
         }
     }
 }
-
